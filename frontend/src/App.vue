@@ -27,9 +27,16 @@ export default defineComponent({
   box-sizing: border-box;
   font-family: "Roboto", "sans-serif";
 }
-
 body {
   min-width: 400px;
   min-height: 100vh;
+}
+
+main {
+    height: calc(100vh - 64px - 68px);
+    padding: 16px;
+    background-image: url(./assets/background.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 </style>
