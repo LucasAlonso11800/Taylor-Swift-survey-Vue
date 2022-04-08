@@ -41,44 +41,86 @@
         </option>
       </select>
     </div>
-    <button type="submit">Send answer</button>
+    <button type="submit" :disabled="onRequest">Send answer</button>
   </form>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import axios from "axios";
+// Utils
+import { answerQuestion } from "../utils";
 // Types
 import { QuestionType } from "../types";
 
 export default defineComponent({
   name: "QuestionComponent",
-  props: { question: { type: String } },
+  props: {
+    question: { type: String, required: true },
+    handleQuestionChange: { type: Function, required: true },
+  },
   setup(props) {
     const id = ref();
     const title = ref<string>("");
     const questions = ref<QuestionType[]>([]);
     const songs = ref<string[]>([]);
-    const favourite = ref("");
-    const worst = ref("");
-    const underrated = ref("");
-    const friday = ref("");
-    const sunday = ref("");
+    const favourite = ref<string>("");
+    const worst = ref<string>("");
+    const underrated = ref<string>("");
+    const friday = ref<string>("");
+    const sunday = ref<string>("");
+    const onRequest = ref<boolean>(false);
 
-    onMounted(async () => {
-      const response = await (await axios.get("/data.json")).data;
-      const initialValue = response[props.question]; 
-      const firstSong = initialValue.songs[0];
-      id.value = initialValue.id;
-      title.value = initialValue.title;
-      questions.value = initialValue.questions;
-      songs.value = initialValue.songs;
-      favourite.value = worst.value = underrated.value = friday.value = sunday.value = firstSong;
-    });
+    watch(
+      props,
+      async () => {
+        const response = await (await axios.get("/data.json")).data;
+        const initialValue = response[props.question];
+        const firstSong = initialValue.songs[0];
+        id.value = initialValue.id;
+        title.value = initialValue.title;
+        questions.value = initialValue.questions;
+        songs.value = initialValue.songs;
+        favourite.value =
+          worst.value =
+          underrated.value =
+          friday.value =
+          sunday.value =
+            firstSong;
+      },
+      { immediate: true }
+    );
 
-    const handleSubmit = () => console.log('Submitting')
-    
-    return { title, questions, songs, favourite, worst, underrated, friday, sunday, handleSubmit };
+    const handleSubmit = async () => {
+      try {
+        onRequest.value = true;
+        await answerQuestion('answer', {
+          question: id.value,
+          favourite: favourite.value,
+          worst: worst.value,
+          underrated: underrated.value,
+          friday: friday.value,
+          sunday: sunday.value,
+        });
+        onRequest.value = false;
+        props.handleQuestionChange();
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    return {
+      title,
+      questions,
+      songs,
+      favourite,
+      worst,
+      underrated,
+      friday,
+      sunday,
+      onRequest,
+      handleSubmit,
+    };
   },
 });
 </script>
@@ -132,8 +174,13 @@ button {
   color: #69b2db;
   text-transform: uppercase;
   transition: all 0.2s ease-in-out;
+  cursor: pointer;
 }
 button:hover {
   text-decoration: underline;
+}
+button:disabled {
+  cursor: default;
+  color: #aaa;
 }
 </style>

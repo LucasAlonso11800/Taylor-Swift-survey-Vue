@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { AnswerType } from './types';
 
 export function generateDatasets(labels: any[], arr: any[], str: string) {
     return ({
@@ -10,7 +11,7 @@ export function generateDatasets(labels: any[], arr: any[], str: string) {
                 borderColor: '#69b2db'
             }]
     })
-};
+}
 
 export function generateOptions(isAlbum: boolean, str: string) {
     return ({
@@ -29,7 +30,7 @@ export function generateOptions(isAlbum: boolean, str: string) {
             legend: { display: false }
         }
     })
-};
+}
 
 export async function getData(endpoint: string) {
     try {
@@ -37,16 +38,16 @@ export async function getData(endpoint: string) {
         return result.data
     }
     catch (err) {
-        throw err;
+        console.log(err);
     }
-};
+}
 
-export async function answerQuestion(endpoint: string, postData: any) {
+export async function answerQuestion(endpoint: string, body: AnswerType) {
     try {
-        const result = await axios.post(`https://taylor-survey.herokuapp.com/${endpoint}`, postData )
+        const result = await axios.post(`https://taylor-survey.herokuapp.com/${endpoint}`, body )
         return result.data
     }
     catch (err) {
         return err;
     }
-};
+}

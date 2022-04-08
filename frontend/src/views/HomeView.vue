@@ -1,16 +1,45 @@
 <template>
-<main>
-<Question :question="'reputation'"/>
-</main>
+  <main>
+    <Question
+      :question="questions[currentQuestion]"
+      :handleQuestionChange="handleQuestionChange"
+    />
+  </main>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import Question from '../components/Question.vue';
+import { defineComponent, ref } from "vue";
+import { useRouter } from "vue-router";
+// Components
+import Question from "../components/Question.vue";
+
 export default defineComponent({
-  name: 'HomeView',
+  name: "HomeView",
   components: {
-      Question
-  }
+    Question,
+  },
+  setup() {
+    const router = useRouter();
+    const currentQuestion = ref<number>(0);
+    const questions = [
+      "fearless",
+      "speakNow",
+      "red",
+      "1989",
+      "reputation",
+      "lover",
+      "folklore",
+      "evermore",
+      "albums",
+    ];
+
+    const handleQuestionChange = async () => {
+      if (currentQuestion.value === questions.length - 1)
+        return await router.push("/results");
+      currentQuestion.value++;
+    };
+
+    return { currentQuestion, questions, handleQuestionChange };
+  },
 });
 </script>
