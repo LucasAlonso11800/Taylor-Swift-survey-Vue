@@ -41,7 +41,9 @@
         </option>
       </select>
     </div>
-    <button type="submit" :disabled="onRequest">Send answer</button>
+    <button type="submit" :disabled="onRequest">
+      {{ onRequest ? "A moment please..." : "Send answer" }}
+    </button>
   </form>
 </template>
 
@@ -94,7 +96,7 @@ export default defineComponent({
     const handleSubmit = async () => {
       try {
         onRequest.value = true;
-        await answerQuestion('answer', {
+        await answerQuestion("answer", {
           question: id.value,
           favourite: favourite.value,
           worst: worst.value,

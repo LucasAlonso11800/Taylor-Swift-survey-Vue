@@ -12,6 +12,8 @@ import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 // Components
 import Question from "../components/Question.vue";
+// Const
+import { questions } from "../const";
 
 export default defineComponent({
   name: "HomeView",
@@ -21,22 +23,12 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const currentQuestion = ref<number>(0);
-    const questions = [
-      "fearless",
-      "speakNow",
-      "red",
-      "1989",
-      "reputation",
-      "lover",
-      "folklore",
-      "evermore",
-      "albums",
-    ];
 
     const handleQuestionChange = async () => {
-      if (currentQuestion.value === questions.length - 1)
+      if (currentQuestion.value === questions.length - 1) {
         return await router.push("/results");
-      currentQuestion.value++;
+      }
+      return currentQuestion.value++;
     };
 
     return { currentQuestion, questions, handleQuestionChange };

@@ -10,4 +10,4 @@ export type AnswerType = {
     underrated: string
     friday: string
     sunday: string
-}
+};

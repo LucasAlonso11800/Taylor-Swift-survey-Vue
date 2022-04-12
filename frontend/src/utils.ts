@@ -13,13 +13,13 @@ export function generateDatasets(labels: any[], arr: any[], str: string) {
     })
 }
 
-export function generateOptions(isAlbum: boolean, str: string) {
+export function generateOptions(str: string) {
     return ({
         animation: false,
         plugins: {
             title: {
                 display: true,
-                text: isAlbum ? `${str} albums` : `${str} songs`,
+                text: str,
                 position: 'top',
                 align: 'center',
                 color: '#9a0036',
@@ -49,5 +49,20 @@ export async function answerQuestion(endpoint: string, body: AnswerType) {
     }
     catch (err) {
         return err;
+    }
+}
+
+export const getChartsTitle = (index: number): string => {
+    switch (index) {
+        case 0: return "Fearless";
+        case 1: return "Speak Now";
+        case 2: return "Red";
+        case 3: return "1989";
+        case 4: return "Reputation";
+        case 5: return "Lover";
+        case 6: return "folklore";
+        case 7: return "evermore";
+        case 8: return "Albums";
+        default: return "";
     }
 }
